@@ -730,29 +730,43 @@
       const monto = palabrasANumero(texto) || extraerDescYMonto(texto)?.monto;
       if (monto > 0) document.getElementById('gananciaDeseada').value = monto;
     } else if (modo === 'verif') {
-      // Intentar extraer números directamente del texto
-      const nums = texto.match(/\d[\d.,]*/g);
-      if (nums && nums.length >= 2) {
-        document.getElementById('precioPresup').value = parseFloat(nums[0].replace(/\./g,'').replace(',','.'));
-        document.getElementById('horasPresup').value = parseFloat(nums[1].replace(/\./g,'').replace(',','.'));
-      } else if (nums && nums.length === 1) {
-        // Solo un número: asignar al precio
-        document.getElementById('precioPresup').value = parseFloat(nums[0].replace(/\./g,'').replace(',','.'));
+      // El teléfono puede transcribir "600 mil pesos 15 horas" (mix de dígitos y palabras)
+      // Estrategia: normalizar todo a palabras primero, separar precio y horas
+      const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+      // Reemplazar dígitos sueltos por su equivalente para que palabrasANumero los procese
+      // Ej: "600 mil" → queremos tratar "600" como seiscientos para multiplicar por mil
+      // Mejor: detectar patrón "NUMERO mil/millones" y convertir
+      function textoAValor(str) {
+        // Si es solo dígitos (con puntos/comas), convertir directo
+        const soloNum = str.trim().replace(/\./g,'').replace(',','.');
+        if (/^\d+(\.\d+)?$/.test(soloNum)) return parseFloat(soloNum);
+        // Si tiene dígitos seguidos de "mil" o "millones", resolver
+        const conMil = str.replace(/(\d[\d.,]*)\s*mil/g, (_, n) => {
+          return String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000);
+        });
+        const conMillon = conMil.replace(/(\d[\d.,]*)\s*mill[oa]n[eoa]*/g, (_, n) => {
+          return String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000000);
+        });
+        // Ahora intentar con palabras
+        const porPalabras = palabrasANumero(conMillon);
+        if (porPalabras > 0) return porPalabras;
+        // Último recurso: primer número del string
+        const m = conMillon.match(/\d+/);
+        return m ? parseFloat(m[0]) : 0;
+      }
+
+      // Separar precio y horas por la palabra "horas" o "hora"
+      const sepMatch = t.match(/^(.+?)\s+(?:horas?|,)\s*(.+)$/);
+      if (sepMatch) {
+        const precio = textoAValor(sepMatch[1]);
+        const horas = textoAValor(sepMatch[2]);
+        if (precio > 0) document.getElementById('precioPresup').value = precio;
+        if (horas > 0) document.getElementById('horasPresup').value = horas;
       } else {
-        // Intentar con palabras: buscar separadores como "coma", "y", "horas"
-        const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-        // Intentar separar por "horas" o "coma" o "y"
-        const separadores = /\b(hora|horas|coma|y)\b/;
-        const partes = t.split(separadores).filter(p => p.trim() && !separadores.test(p));
-        if (partes.length >= 2) {
-          const precio = palabrasANumero(partes[0]);
-          const horas = palabrasANumero(partes[partes.length - 1]);
-          if (precio > 0) document.getElementById('precioPresup').value = precio;
-          if (horas > 0) document.getElementById('horasPresup').value = horas;
-        } else {
-          const r = extraerDescYMonto(texto);
-          if (r) document.getElementById('precioPresup').value = r.monto;
-        }
+        // Sin separador claro: todo es el precio
+        const precio = textoAValor(t);
+        if (precio > 0) document.getElementById('precioPresup').value = precio;
       }
     }
   }
