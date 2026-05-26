@@ -662,21 +662,24 @@
   function resolverMonto(str) {
     // Convierte cualquier combo de dígitos+palabras a número
     // Ej: "400 mil" → 400000, "cuatrocientos mil" → 400000, "400000" → 400000
+    const original = str;
     let s = str.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
                .replace(/pesos?|dolares?|euros?|mensual/gi,'').trim();
-    // Dígito + "mil" → multiplicar
+    // Primero intentar con palabras puras (cubre "cuatrocientos mil", "ochenta mil", etc.)
+    const porPalabras = palabrasANumero(s);
+    if (porPalabras > 0) return porPalabras;
+    // Dígito + "mil" → multiplicar (cubre "400 mil", "2 mil")
     s = s.replace(/(\d[\d.,]*)\s*mil(?!l)/g, (_, n) =>
       String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000));
     // Dígito + "millon(es)" → multiplicar
     s = s.replace(/(\d[\d.,]*)\s*mill[oa]n[eo]*/g, (_, n) =>
       String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000000));
-    // Si quedan varios números, sumarlos (ej "2000000 500000")
+    // Sumar todos los números que quedaron
     const nums = s.match(/\d+/g);
     if (nums && nums.length > 0) {
       return nums.reduce((a, n) => a + parseFloat(n), 0);
     }
-    // Solo palabras
-    return palabrasANumero(str);
+    return 0;
   }
 
   function extraerDescYMonto(texto) {
