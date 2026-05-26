@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gano x Voz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --negro: #0a0a0a;
+    --negro2: #111111;
+    --negro3: #1a1a1a;
+    --negro4: #222222;
+    --turquesa: #00d4c8;
+    --turquesa2: #00b8ae;
+    --turquesa3: rgba(0,212,200,0.15);
+    --turquesa4: rgba(0,212,200,0.08);
+    --rojo: #ff3b3b;
+    --rojo2: rgba(255,59,59,0.15);
+    --verde: #00d4c8;
+    --gris: #666;
+    --gris2: #888;
+    --blanco: #ffffff;
+    --blanco2: #cccccc;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  body {
+    background: var(--negro);
+    color: var(--blanco);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid #1e1e1e;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--turquesa);
+  }
+  .logo span { color: var(--blanco2); }
+  .tagline {
+    font-size: 11px;
+    color: var(--gris2);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* MONEDA SELECTOR */
+  .moneda-selector {
+    background: var(--negro3);
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 8px 14px;
+    color: var(--turquesa);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+  }
+  .moneda-selector option { background: #1a1a1a; color: white; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    padding: 16px 20px 0;
+    gap: 4px;
+    border-bottom: 1px solid #1e1e1e;
+  }
+  .tab {
+    flex: 1;
+    padding: 10px 4px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--gris);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .tab.active {
+    color: var(--turquesa);
+    border-bottom-color: var(--turquesa);
+  }
+
+  /* CONTENIDO */
+  .content { padding: 20px; display: none; }
+  .content.active { display: block; }
+
+  /* SECCIÓN TÍTULO */
+  .sec-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gris2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  /* LISTA DE GASTOS */
+  .gastos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    min-height: 20px;
+  }
+  .gasto-item {
+    background: var(--negro3);
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { opacity:0; transform:translateY(-8px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .gasto-desc { font-size: 14px; color: var(--blanco2); }
+  .gasto-right { display: flex; align-items: center; gap: 12px; }
+  .gasto-monto { font-size: 15px; font-weight: 700; color: var(--turquesa); }
+  .gasto-del {
+    width: 24px; height: 24px;
+    background: #2a2a2a;
+    border: none;
+    border-radius: 6px;
+    color: var(--gris2);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* TOTAL GASTOS */
+  .total-gastos {
+    background: var(--negro4);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    border: 1px solid #2a2a2a;
+  }
+  .total-gastos-label { font-size: 12px; color: var(--gris2); font-weight: 600; }
+  .total-gastos-monto { font-size: 20px; font-weight: 700; color: var(--turquesa); }
+
+  /* BOTÓN MIC */
+  .mic-btn {
+    width: 100%;
+    padding: 18px;
+    border-radius: 16px;
+    border: 2px solid var(--turquesa);
+    background: var(--turquesa4);
+    color: var(--blanco);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .mic-btn:active { transform: scale(0.97); }
+  .mic-btn.grabando {
+    border-color: var(--rojo);
+    background: var(--rojo2);
+    animation: pulse 1s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,59,59,0.3); }
+    50% { box-shadow: 0 0 0 8px rgba(255,59,59,0); }
+  }
+  .mic-icon { font-size: 22px; }
+
+  /* TRANSCRIPCION */
+  .transcripcion {
+    background: var(--negro3);
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--gris2);
+    min-height: 44px;
+    margin-bottom: 20px;
+    font-style: italic;
+    display: none;
+  }
+  .transcripcion.visible { display: block; }
+
+  /* INPUTS MANUALES */
+  .input-group { margin-bottom: 16px; }
+  .input-label { font-size: 11px; color: var(--gris2); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .input-row { display: flex; gap: 8px; }
+  .input-field {
+    flex: 1;
+    background: var(--negro3);
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--blanco);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-field:focus { border-color: var(--turquesa); }
+  .input-field::placeholder { color: #444; }
+  .input-field.num { max-width: 140px; text-align: right; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid #1e1e1e; margin: 24px 0; }
+
+  /* RESULTADO */
+  .resultado-box {
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 2px solid;
+    transition: all 0.5s;
+  }
+  .resultado-box.positivo { border-color: var(--turquesa); background: var(--turquesa4); }
+  .resultado-box.negativo { border-color: var(--rojo); background: var(--rojo2); }
+  .resultado-box.neutro { border-color: #2a2a2a; background: var(--negro3); }
+
+  .resultado-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .positivo .resultado-label { color: var(--turquesa); }
+  .negativo .resultado-label { color: var(--rojo); }
+  .neutro .resultado-label { color: var(--gris2); }
+
+  .resultado-valor {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .positivo .resultado-valor { color: var(--turquesa); }
+  .negativo .resultado-valor { color: var(--rojo); }
+  .neutro .resultado-valor { color: var(--gris2); }
+
+  .resultado-sub { font-size: 13px; color: var(--gris2); }
+
+  /* GRID RESULTADOS */
+  .resultados-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .result-card {
+    background: var(--negro3);
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .result-card-label { font-size: 10px; color: var(--gris2); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .result-card-valor { font-size: 18px; font-weight: 700; color: var(--turquesa); }
+
+  /* SEMAFORO */
+  .semaforo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--negro3);
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .semaforo-emoji { font-size: 32px; flex-shrink: 0; }
+  .semaforo-texto { font-size: 14px; color: var(--blanco2); line-height: 1.4; }
+  .semaforo-texto strong { color: var(--blanco); }
+
+  /* MIC FACES */
+  .mic-face { width: 56px; height: 56px; flex-shrink: 0; }
+  .mic-face svg { width: 100%; height: 100%; }
+
+  /* VERIFICADOR */
+  .verificador-result {
+    background: var(--negro3);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 16px;
+    display: none;
+  }
+  .verificador-result.visible { display: block; }
+  .verif-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #2a2a2a;
+    font-size: 14px;
+  }
+  .verif-row:last-child { border-bottom: none; }
+  .verif-label { color: var(--gris2); }
+  .verif-valor { font-weight: 700; }
+  .verif-valor.ok { color: var(--turquesa); }
+  .verif-valor.mal { color: var(--rojo); }
+
+  .verif-banner {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .verif-banner.ok { background: var(--turquesa3); color: var(--turquesa); }
+  .verif-banner.mal { background: var(--rojo2); color: var(--rojo); }
+
+  /* BTN CALCULAR */
+  .btn-calcular {
+    width: 100%;
+    padding: 18px;
+    border-radius: 16px;
+    border: none;
+    background: var(--turquesa);
+    color: var(--negro);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .btn-calcular:active { transform: scale(0.97); }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 24px 20px;
+    font-size: 11px;
+    color: #333;
+  }
+  .footer span { color: var(--turquesa); font-weight: 700; }
+
+  /* HINT */
+  .hint {
+    font-size: 12px;
+    color: var(--gris);
+    text-align: center;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 20px;
+    color: #333;
+    font-size: 13px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="logo">GANO <span>x</span> VOZ</div>
+    <div class="tagline">Calculá cuánto necesitás cobrar</div>
+  </div>
+  <select class="moneda-selector" id="monedaSel" onchange="actualizarMoneda()">
+    <option value="$">$ Pesos</option>
+    <option value="USD">USD</option>
+    <option value="EUR">EUR</option>
+    <option value="R$">R$ BRL</option>
+    <option value="S/">S/ PEN</option>
+    <option value="COP">COP</option>
+    <option value="MXN">MXN</option>
+    <option value="CLP">CLP</option>
+    <option value="UYU">UYU</option>
+    <option value="Bs.">Bs. VES</option>
+    <option value="Q">Q GTQ</option>
+    <option value="L">L HNL</option>
+  </select>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="cambiarTab(0)">💸 Gastos</div>
+  <div class="tab" onclick="cambiarTab(1)">⏱ Tiempo</div>
+  <div class="tab" onclick="cambiarTab(2)">📊 Resultado</div>
+  <div class="tab" onclick="cambiarTab(3)">✅ Verificar</div>
+</div>
+
+<!-- TAB 0: GASTOS -->
+<div class="content active" id="tab0">
+  <div class="sec-label">Mis gastos fijos mensuales</div>
+
+  <button class="mic-btn" id="micGastos" onclick="toggleMic('gastos')">
+    <span class="mic-icon">🎙️</span>
+    <span id="micGastosText">DICTAR GASTO</span>
+  </button>
+  <div class="hint">Decí: "alquiler cuatrocientos mil" o "nafta veinte mil"</div>
+  <div class="transcripcion" id="transGastos"></div>
+
+  <div class="gastos-list" id="gastosList">
+    <div class="empty-state">Aún no agregaste gastos</div>
+  </div>
+
+  <div class="total-gastos">
+    <div class="total-gastos-label">TOTAL GASTOS</div>
+    <div class="total-gastos-monto" id="totalGastosDisplay">$ 0</div>
+  </div>
+
+  <button class="btn-calcular" onclick="cambiarTab(1)">SIGUIENTE → TIEMPO</button>
+</div>
+
+<!-- TAB 1: TIEMPO Y GANANCIA -->
+<div class="content" id="tab1">
+  <div class="sec-label">¿Cuánto trabajás?</div>
+
+  <div class="input-group">
+    <div class="input-label">Días trabajados por mes</div>
+    <input type="number" class="input-field" id="dias" placeholder="22" value="22" min="1" max="31">
+  </div>
+
+  <div class="input-group">
+    <div class="input-label">Horas por día</div>
+    <input type="number" class="input-field" id="horas" placeholder="8" value="8" min="1" max="24">
+  </div>
+
+  <div class="input-group">
+    <div class="input-label">% del tiempo que es facturable (el resto son trámites, viajes, etc.)</div>
+    <input type="number" class="input-field" id="facturable" placeholder="70" value="70" min="10" max="100">
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-label">¿Cuánto querés ganar limpio?</div>
+
+  <button class="mic-btn" id="micGanancia" onclick="toggleMic('ganancia')">
+    <span class="mic-icon">🎙️</span>
+    <span id="micGananciaText">DICTAR GANANCIA DESEADA</span>
+  </button>
+  <div class="hint">Decí: "quinientos mil pesos"</div>
+  <div class="transcripcion" id="transGanancia"></div>
+
+  <div class="input-group" style="margin-top:8px;">
+    <div class="input-label">O escribila acá</div>
+    <input type="number" class="input-field" id="gananciaDeseada" placeholder="500000" min="0">
+  </div>
+
+  <button class="btn-calcular" onclick="calcular()">CALCULAR MI TARIFA →</button>
+</div>
+
+<!-- TAB 2: RESULTADO -->
+<div class="content" id="tab2">
+  <div class="sec-label">Tu tarifa mínima por hora</div>
+
+  <div class="resultado-box neutro" id="tarifaBox">
+    <div class="resultado-label" id="tarifaLabel">TARIFA/HORA</div>
+    <div class="resultado-valor" id="tarifaValor">$ 0</div>
+    <div class="resultado-sub" id="tarifaSub">Completá los datos en las pestañas anteriores</div>
+  </div>
+
+  <div class="resultados-grid">
+    <div class="result-card">
+      <div class="result-card-label">Necesitás facturar</div>
+      <div class="result-card-valor" id="facturarVal">$ 0</div>
+    </div>
+    <div class="result-card">
+      <div class="result-card-label">Horas facturables</div>
+      <div class="result-card-valor" id="horasVal">0 hs</div>
+    </div>
+    <div class="result-card">
+      <div class="result-card-label">Tus gastos fijos</div>
+      <div class="result-card-valor" id="gastosResVal">$ 0</div>
+    </div>
+    <div class="result-card">
+      <div class="result-card-label">Ganancia deseada</div>
+      <div class="result-card-valor" id="gananciaResVal">$ 0</div>
+    </div>
+  </div>
+
+  <div class="semaforo" id="semaforo" style="display:none">
+    <div class="mic-face" id="semaforoEmoji"></div>
+    <div class="semaforo-texto" id="semaforoTexto"></div>
+  </div>
+
+  <button class="btn-calcular" onclick="cambiarTab(3)">VERIFICAR UN PRESUPUESTO →</button>
+</div>
+
+<!-- TAB 3: VERIFICADOR -->
+<div class="content" id="tab3">
+  <div class="sec-label">¿Este presupuesto te conviene?</div>
+
+  <div class="input-group">
+    <div class="input-label">Precio que vas a cobrar</div>
+    <input type="number" class="input-field" id="precioPresup" placeholder="80000" min="0">
+  </div>
+
+  <div class="input-group">
+    <div class="input-label">Horas estimadas para el trabajo</div>
+    <input type="number" class="input-field" id="horasPresup" placeholder="12" min="0">
+  </div>
+
+  <button class="mic-btn" id="micVerif" onclick="toggleMic('verif')">
+    <span class="mic-icon">🎙️</span>
+    <span id="micVerifText">DICTAR PRECIO Y HORAS</span>
+  </button>
+  <div class="hint">Decí: "ochenta mil pesos, doce horas"</div>
+  <div class="transcripcion" id="transVerif"></div>
+
+  <button class="btn-calcular" onclick="verificar()">VERIFICAR</button>
+
+  <div class="verificador-result" id="verifResult">
+    <div class="verif-row">
+      <span class="verif-label">Precio del trabajo</span>
+      <span class="verif-valor" id="vPrecio">$ 0</span>
+    </div>
+    <div class="verif-row">
+      <span class="verif-label">Horas estimadas</span>
+      <span class="verif-valor" id="vHoras">0 hs</span>
+    </div>
+    <div class="verif-row">
+      <span class="verif-label">Tu ingreso por hora</span>
+      <span class="verif-valor" id="vIngHora">$ 0</span>
+    </div>
+    <div class="verif-row">
+      <span class="verif-label">Tu tarifa mínima</span>
+      <span class="verif-valor" id="vTarifaMin">$ 0</span>
+    </div>
+    <div class="verif-row">
+      <span class="verif-label">Ganancia / pérdida</span>
+      <span class="verif-valor" id="vGanancia">$ 0</span>
+    </div>
+    <div class="verif-banner" id="vBanner">-</div>
+  </div>
+</div>
+
+<div class="footer">Creado con <span>Gano x Voz</span> · Complemento de <span>Presu x Voz</span></div>
+
+<script>
+  // ── ESTADO ──────────────────────────────────────────────────
+  let gastos = [];
+  let tarifaMinima = 0;
+  let moneda = '$';
+  let modoMic = null;
+  let micActivo = false;
+
+  // Una sola instancia de SpeechRecognition para toda la sesión
+  // Chrome file:// pide permiso por cada instancia nueva — reutilizando una sola lo evita
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let rec = null;
+  if (SpeechRec) {
+    rec = new SpeechRec();
+    rec.lang = 'es-AR';
+    rec.interimResults = true;
+    rec.continuous = false;
+
+    rec.onresult = (e) => {
+      const transcript = Array.from(e.results).map(r => r[0].transcript).join(' ');
+      const transId = modoMic === 'gastos' ? 'transGastos' : modoMic === 'ganancia' ? 'transGanancia' : 'transVerif';
+      document.getElementById(transId).textContent = transcript;
+      if (e.results[0].isFinal) procesarVoz(modoMic, transcript);
+    };
+
+    rec.onerror = (e) => {
+      if (e.error === 'not-allowed') alert('Permiso de micrófono denegado.');
+      pararMic();
+    };
+
+    rec.onend = () => { pararMic(); };
+  }
+
+  // ── MONEDA ──────────────────────────────────────────────────
+  function actualizarMoneda() {
+    moneda = document.getElementById('monedaSel').value;
+    renderGastos();
+    actualizarTotalGastos();
+  }
+
+  function fmt(n) {
+    return moneda + ' ' + Math.round(n).toLocaleString('es-AR');
+  }
+
+  // ── TABS ──────────────────────────────────────────────────
+  function cambiarTab(i) {
+    document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', i===j));
+    document.querySelectorAll('.content').forEach((c,j) => c.classList.toggle('active', i===j));
+  }
+
+  // ── PALABRAS A NÚMEROS ──────────────────────────────────────
+  const numWords = {
+    'cero':0,'un':1,'uno':1,'una':1,'dos':2,'tres':3,'cuatro':4,'cinco':5,
+    'seis':6,'siete':7,'ocho':8,'nueve':9,'diez':10,'once':11,'doce':12,
+    'trece':13,'catorce':14,'quince':15,'dieciseis':16,'diecisiete':17,
+    'dieciocho':18,'diecinueve':19,'veinte':20,'veintiun':21,'veintidos':22,
+    'veintitres':23,'veinticuatro':24,'veinticinco':25,'veintiseis':26,
+    'veintisiete':27,'veintiocho':28,'veintinueve':29,'treinta':30,
+    'cuarenta':40,'cincuenta':50,'sesenta':60,'setenta':70,'ochenta':80,
+    'noventa':90,'cien':100,'ciento':100,'doscientos':200,'doscientas':200,
+    'trescientos':300,'trescientas':300,'cuatrocientos':400,'cuatrocientas':400,
+    'quinientos':500,'quinientas':500,'seiscientos':600,'seiscientas':600,
+    'setecientos':700,'setecientas':700,'ochocientos':800,'ochocientas':800,
+    'novecientos':900,'novecientas':900,'mil':1000,'millon':1000000,'millones':1000000,
+    'palo':1000000,'palos':1000000,'luca':1000,'lucas':1000,'gamba':100,'gambas':100
+  };
+
+  function palabrasANumero(texto) {
+    const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/\by\b/g,'').replace(/\bde\b/g,'').trim();
+    const words = t.split(/\s+/);
+    let total = 0, current = 0;
+    for (let w of words) {
+      if (numWords[w] !== undefined) {
+        const v = numWords[w];
+        if (v === 1000000) { current = (current||1)*v; total += current; current = 0; }
+        else if (v === 1000) { current = (current||1)*v; }
+        else if (v >= 100) { current = (current||1)*v; }
+        else { current += v; }
+      }
+    }
+    total += current;
+    return total;
+  }
+
+  function extraerDescYMonto(texto) {
+    const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const numRaw = /(\d[\d.,]*)/.exec(t);
+    if (numRaw) {
+      const monto = parseFloat(numRaw[1].replace('.','').replace(',','.'));
+      const desc = t.replace(numRaw[0],'').replace(/pesos?|dolares?|euros?|mensual/gi,'').trim();
+      return { desc: desc || 'Gasto', monto };
+    }
+    const keywords = Object.keys(numWords);
+    let mejorIdx = -1, mejorVal = 0;
+    const words = t.split(/\s+/);
+    for (let i = 0; i < words.length; i++) {
+      if (numWords[words[i]] !== undefined && i > mejorIdx) { mejorIdx = i; }
+    }
+    if (mejorIdx >= 0) {
+      const desc = words.slice(0, mejorIdx).join(' ').replace(/pesos?|dolares?|euros?/gi,'').trim() || 'Gasto';
+      const montoTexto = words.slice(mejorIdx).join(' ');
+      const monto = palabrasANumero(montoTexto);
+      return { desc, monto };
+    }
+    return null;
+  }
+
+  // ── MICRÓFONO ──────────────────────────────────────────────
+  function toggleMic(modo) {
+    if (!rec) {
+      alert('Tu navegador no soporta reconocimiento de voz. Usá Chrome en Android.');
+      return;
+    }
+    // Si ya está grabando en este modo, detener
+    if (micActivo && modoMic === modo) {
+      rec.stop();
+      return;
+    }
+    // Si está grabando en otro modo, detener primero
+    if (micActivo) rec.stop();
+
+    modoMic = modo;
+    const btnId = modo === 'gastos' ? 'micGastos' : modo === 'ganancia' ? 'micGanancia' : 'micVerif';
+    const txtId = modo === 'gastos' ? 'micGastosText' : modo === 'ganancia' ? 'micGananciaText' : 'micVerifText';
+    const transId = modo === 'gastos' ? 'transGastos' : modo === 'ganancia' ? 'transGanancia' : 'transVerif';
+
+    document.getElementById(btnId).classList.add('grabando');
+    document.getElementById(txtId).textContent = '⏹ TOCÁ PARA DETENER';
+    document.getElementById(transId).classList.add('visible');
+    document.getElementById(transId).textContent = '🎙️ Escuchando...';
+
+    micActivo = true;
+    rec.start();
+  }
+
+  function pararMic() {
+    micActivo = false;
+    const ids = { gastos: ['micGastos','micGastosText'], ganancia: ['micGanancia','micGananciaText'], verif: ['micVerif','micVerifText'] };
+    const labels = { micGastosText:'DICTAR GASTO', micGananciaText:'DICTAR GANANCIA DESEADA', micVerifText:'DICTAR PRECIO Y HORAS' };
+    if (modoMic && ids[modoMic]) {
+      const [btnId, txtId] = ids[modoMic];
+      const btn = document.getElementById(btnId);
+      if (btn) btn.classList.remove('grabando');
+      const txt = document.getElementById(txtId);
+      if (txt) txt.textContent = labels[txtId] || 'DICTAR';
+    }
+  }
+
+  function procesarVoz(modo, texto) {
+    if (modo === 'gastos') {
+      const r = extraerDescYMonto(texto);
+      if (r && r.monto > 0) {
+        gastos.push({ desc: capitalizar(r.desc), monto: r.monto });
+        renderGastos();
+        actualizarTotalGastos();
+      }
+    } else if (modo === 'ganancia') {
+      const monto = palabrasANumero(texto) || extraerDescYMonto(texto)?.monto;
+      if (monto > 0) document.getElementById('gananciaDeseada').value = monto;
+    } else if (modo === 'verif') {
+      // Intentar extraer números directamente del texto
+      const nums = texto.match(/\d[\d.,]*/g);
+      if (nums && nums.length >= 2) {
+        document.getElementById('precioPresup').value = parseFloat(nums[0].replace(/\./g,'').replace(',','.'));
+        document.getElementById('horasPresup').value = parseFloat(nums[1].replace(/\./g,'').replace(',','.'));
+      } else if (nums && nums.length === 1) {
+        // Solo un número: asignar al precio
+        document.getElementById('precioPresup').value = parseFloat(nums[0].replace(/\./g,'').replace(',','.'));
+      } else {
+        // Intentar con palabras: buscar separadores como "coma", "y", "horas"
+        const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+        // Intentar separar por "horas" o "coma" o "y"
+        const separadores = /\b(hora|horas|coma|y)\b/;
+        const partes = t.split(separadores).filter(p => p.trim() && !separadores.test(p));
+        if (partes.length >= 2) {
+          const precio = palabrasANumero(partes[0]);
+          const horas = palabrasANumero(partes[partes.length - 1]);
+          if (precio > 0) document.getElementById('precioPresup').value = precio;
+          if (horas > 0) document.getElementById('horasPresup').value = horas;
+        } else {
+          const r = extraerDescYMonto(texto);
+          if (r) document.getElementById('precioPresup').value = r.monto;
+        }
+      }
+    }
+  }
+
+  function capitalizar(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  // ── GASTOS ──────────────────────────────────────────────────
+  function renderGastos() {
+    const list = document.getElementById('gastosList');
+    if (gastos.length === 0) {
+      list.innerHTML = '<div class="empty-state">Aún no agregaste gastos</div>';
+      return;
+    }
+    list.innerHTML = gastos.map((g,i) => `
+      <div class="gasto-item">
+        <span class="gasto-desc">${g.desc}</span>
+        <div class="gasto-right">
+          <span class="gasto-monto">${fmt(g.monto)}</span>
+          <button class="gasto-del" onclick="borrarGasto(${i})">✕</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function borrarGasto(i) {
+    gastos.splice(i, 1);
+    renderGastos();
+    actualizarTotalGastos();
+  }
+
+  function totalGastos() { return gastos.reduce((s,g) => s + g.monto, 0); }
+
+  function actualizarTotalGastos() {
+    document.getElementById('totalGastosDisplay').textContent = fmt(totalGastos());
+  }
+
+  // ── SVG MIC FACES ──────────────────────────────────────────
+  function micFeliz() {
+    return `<svg viewBox="0 0 80 90" xmlns="http://www.w3.org/2000/svg">
+      <!-- Papelitos volando -->
+      <rect x="58" y="5" width="7" height="5" rx="1" fill="#00d4c8" opacity="0.8" transform="rotate(20 61 7)"/>
+      <rect x="66" y="18" width="5" height="4" rx="1" fill="#fff" opacity="0.6" transform="rotate(-15 68 20)"/>
+      <rect x="52" y="2" width="4" height="6" rx="1" fill="#00d4c8" opacity="0.5" transform="rotate(35 54 5)"/>
+      <rect x="70" y="8" width="6" height="4" rx="1" fill="#fff" opacity="0.4" transform="rotate(-5 73 10)"/>
+      <!-- Cuerpo del mic -->
+      <rect x="26" y="20" width="28" height="36" rx="14" fill="#00d4c8"/>
+      <!-- Carita feliz -->
+      <circle cx="35" cy="33" r="3" fill="#003d3a"/>
+      <circle cx="45" cy="33" r="3" fill="#003d3a"/>
+      <path d="M33 42 Q40 50 47 42" stroke="#003d3a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Base mic -->
+      <path d="M20 52 Q20 68 40 68 Q60 68 60 52" stroke="#00d4c8" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <line x1="40" y1="68" x2="40" y2="78" stroke="#00d4c8" stroke-width="3"/>
+      <line x1="28" y1="78" x2="52" y2="78" stroke="#00d4c8" stroke-width="3" stroke-linecap="round"/>
+    </svg>`;
+  }
+
+  function micPensativo() {
+    return `<svg viewBox="0 0 80 90" xmlns="http://www.w3.org/2000/svg">
+      <!-- Burbuja de pensamiento -->
+      <circle cx="62" cy="12" r="4" fill="#b8860b" opacity="0.7"/>
+      <circle cx="70" cy="7" r="3" fill="#b8860b" opacity="0.5"/>
+      <circle cx="76" cy="3" r="2" fill="#b8860b" opacity="0.3"/>
+      <!-- Cuerpo del mic -->
+      <rect x="26" y="20" width="28" height="36" rx="14" fill="#d4a017"/>
+      <!-- Carita pensativa -->
+      <circle cx="35" cy="33" r="3" fill="#4a3500"/>
+      <circle cx="45" cy="33" r="3" fill="#4a3500"/>
+      <line x1="33" y1="45" x2="47" y2="45" stroke="#4a3500" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- Ceja pensativa -->
+      <path d="M32 27 Q35 25 38 27" stroke="#4a3500" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Base mic -->
+      <path d="M20 52 Q20 68 40 68 Q60 68 60 52" stroke="#d4a017" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <line x1="40" y1="68" x2="40" y2="78" stroke="#d4a017" stroke-width="3"/>
+      <line x1="28" y1="78" x2="52" y2="78" stroke="#d4a017" stroke-width="3" stroke-linecap="round"/>
+    </svg>`;
+  }
+
+  function micTriste() {
+    return `<svg viewBox="0 0 80 90" xmlns="http://www.w3.org/2000/svg">
+      <!-- Lagrimitas -->
+      <ellipse cx="57" cy="48" rx="3" ry="5" fill="#ff6b6b" opacity="0.6"/>
+      <ellipse cx="63" cy="52" rx="2" ry="4" fill="#ff6b6b" opacity="0.4"/>
+      <!-- Cuerpo del mic -->
+      <rect x="26" y="20" width="28" height="36" rx="14" fill="#ff3b3b"/>
+      <!-- Carita triste -->
+      <circle cx="35" cy="33" r="3" fill="#5a0000"/>
+      <circle cx="45" cy="33" r="3" fill="#5a0000"/>
+      <path d="M33 47 Q40 41 47 47" stroke="#5a0000" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Cejas tristes -->
+      <path d="M32 27 Q35 29 38 27" stroke="#5a0000" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M42 27 Q45 29 48 27" stroke="#5a0000" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Base mic -->
+      <path d="M20 52 Q20 68 40 68 Q60 68 60 52" stroke="#ff3b3b" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <line x1="40" y1="68" x2="40" y2="78" stroke="#ff3b3b" stroke-width="3"/>
+      <line x1="28" y1="78" x2="52" y2="78" stroke="#ff3b3b" stroke-width="3" stroke-linecap="round"/>
+    </svg>`;
+  }
+
+  // ── CALCULAR ──────────────────────────────────────────────
+  function calcular() {
+    const dias = parseFloat(document.getElementById('dias').value) || 22;
+    const horas = parseFloat(document.getElementById('horas').value) || 8;
+    const pctFacturable = parseFloat(document.getElementById('facturable').value) || 70;
+    const ganancia = parseFloat(document.getElementById('gananciaDeseada').value) || 0;
+    const gastosMes = totalGastos();
+
+    const horasTotal = dias * horas;
+    const horasFacturables = Math.round(horasTotal * pctFacturable / 100);
+    const necesitaFacturar = gastosMes + ganancia;
+    tarifaMinima = horasFacturables > 0 ? necesitaFacturar / horasFacturables : 0;
+
+    document.getElementById('facturarVal').textContent = fmt(necesitaFacturar);
+    document.getElementById('horasVal').textContent = horasFacturables + ' hs';
+    document.getElementById('gastosResVal').textContent = fmt(gastosMes);
+    document.getElementById('gananciaResVal').textContent = fmt(ganancia);
+    document.getElementById('tarifaValor').textContent = fmt(tarifaMinima);
+
+    const box = document.getElementById('tarifaBox');
+    const label = document.getElementById('tarifaLabel');
+    const sub = document.getElementById('tarifaSub');
+    const sem = document.getElementById('semaforo');
+    const semEmoji = document.getElementById('semaforoEmoji');
+    const semTxt = document.getElementById('semaforoTexto');
+
+    if (tarifaMinima > 0) {
+      box.className = 'resultado-box positivo';
+      label.textContent = 'TU TARIFA MÍNIMA POR HORA';
+      sub.textContent = `Para cubrir gastos y ganar ${fmt(ganancia)}/mes`;
+      sem.style.display = 'flex';
+      semEmoji.innerHTML = micFeliz();
+      semTxt.innerHTML = `<strong>Necesitás cobrar al menos ${fmt(tarifaMinima)}/hora</strong> para alcanzar tu meta. Usá el verificador para evaluar cada presupuesto.`;
+    } else {
+      box.className = 'resultado-box neutro';
+      label.textContent = 'TARIFA/HORA';
+      sub.textContent = 'Completá tus gastos y ganancia deseada';
+      sem.style.display = 'none';
+    }
+
+    cambiarTab(2);
+  }
+
+  // ── VERIFICAR ──────────────────────────────────────────────
+  function verificar() {
+    const precio = parseFloat(document.getElementById('precioPresup').value) || 0;
+    const horas = parseFloat(document.getElementById('horasPresup').value) || 1;
+    const ingHora = precio / horas;
+    const diff = ingHora - tarifaMinima;
+    const gananciaTotal = diff * horas;
+
+    document.getElementById('vPrecio').textContent = fmt(precio);
+    document.getElementById('vHoras').textContent = horas + ' hs';
+    document.getElementById('vIngHora').textContent = fmt(ingHora);
+    document.getElementById('vTarifaMin').textContent = fmt(tarifaMinima);
+
+    const vGan = document.getElementById('vGanancia');
+    const vBan = document.getElementById('vBanner');
+
+    if (gananciaTotal >= 0) {
+      vGan.textContent = '+ ' + fmt(gananciaTotal);
+      vGan.className = 'verif-valor ok';
+      vBan.className = 'verif-banner ok';
+      vBan.innerHTML = '<span style="display:inline-flex;align-items:center;gap:10px;justify-content:center"><span style="width:36px;height:36px;display:inline-block">' + micFeliz() + '</span> ¡Este trabajo te conviene!</span>';
+    } else {
+      vGan.textContent = '- ' + fmt(Math.abs(gananciaTotal));
+      vGan.className = 'verif-valor mal';
+      vBan.className = 'verif-banner mal';
+      vBan.innerHTML = '<span style="display:inline-flex;align-items:center;gap:10px;justify-content:center"><span style="width:36px;height:36px;display:inline-block">' + micTriste() + '</span> Estás cobrando por debajo de tu tarifa mínima</span>';
+    }
+
+    document.getElementById('verifResult').classList.add('visible');
+  }
+
+  // ── INIT ──────────────────────────────────────────────────
+  renderGastos();
+</script>
+</body>
+</html>
