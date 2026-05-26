@@ -650,9 +650,10 @@
         } else {
           current += v;
         }
-      } else if (/^\d+$/.test(w)) {
-        // Dígito suelto en medio del texto (ej el celular a veces transcribe "400 mil")
-        current += parseInt(w);
+      } else if (/^[\d.,]+$/.test(w)) {
+        // Dígito suelto con posibles puntos/comas de miles: "60.000", "400,000", "400000"
+        const limpio = parseFloat(w.replace(/\./g,'').replace(',','.'));
+        if (!isNaN(limpio)) current += limpio;
       }
     }
     total += miles + current;
@@ -675,9 +676,13 @@
     s = s.replace(/(\d[\d.,]*)\s*mill[oa]n[eo]*/g, (_, n) =>
       String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000000));
     // Sumar todos los números que quedaron
-    const nums = s.match(/\d+/g);
+    // IMPORTANTE: quitar puntos de miles antes de parsear (ej "60.000" → 60000)
+    const nums = s.match(/[\d.,]+/g);
     if (nums && nums.length > 0) {
-      return nums.reduce((a, n) => a + parseFloat(n), 0);
+      return nums.reduce((a, n) => {
+        const limpio = n.replace(/\./g,'').replace(',','.');
+        return a + (parseFloat(limpio) || 0);
+      }, 0);
     }
     return 0;
   }
