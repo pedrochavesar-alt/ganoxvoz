@@ -33,6 +33,8 @@
     font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
+    overflow-y: auto;
+    font-size: 16px;
   }
 
   /* HEADER */
@@ -51,7 +53,7 @@
   }
   .logo span { color: var(--blanco2); }
   .tagline {
-    font-size: 11px;
+    font-size: 13px;
     color: var(--gris2);
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -66,7 +68,7 @@
     padding: 8px 14px;
     color: var(--turquesa);
     font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     outline: none;
     cursor: pointer;
@@ -84,7 +86,7 @@
     flex: 1;
     padding: 10px 4px;
     text-align: center;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.5px;
     color: var(--gris);
@@ -104,7 +106,7 @@
 
   /* SECCIÓN TÍTULO */
   .sec-label {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 700;
     color: var(--gris2);
     letter-spacing: 2px;
@@ -134,7 +136,7 @@
     from { opacity:0; transform:translateY(-8px); }
     to { opacity:1; transform:translateY(0); }
   }
-  .gasto-desc { font-size: 14px; color: var(--blanco2); }
+  .gasto-desc { font-size: 16px; color: var(--blanco2); }
   .gasto-right { display: flex; align-items: center; gap: 12px; }
   .gasto-monto { font-size: 15px; font-weight: 700; color: var(--turquesa); }
   .gasto-del {
@@ -143,7 +145,7 @@
     border: none;
     border-radius: 6px;
     color: var(--gris2);
-    font-size: 14px;
+    font-size: 16px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
   }
@@ -201,7 +203,7 @@
     border: 1px solid #2a2a2a;
     border-radius: 12px;
     padding: 12px 16px;
-    font-size: 13px;
+    font-size: 15px;
     color: var(--gris2);
     min-height: 44px;
     margin-bottom: 20px;
@@ -212,7 +214,7 @@
 
   /* INPUTS MANUALES */
   .input-group { margin-bottom: 16px; }
-  .input-label { font-size: 11px; color: var(--gris2); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .input-label { font-size: 13px; color: var(--gris2); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
   .input-row { display: flex; gap: 8px; }
   .input-field {
     flex: 1;
@@ -267,7 +269,7 @@
   .negativo .resultado-valor { color: var(--rojo); }
   .neutro .resultado-valor { color: var(--gris2); }
 
-  .resultado-sub { font-size: 13px; color: var(--gris2); }
+  .resultado-sub { font-size: 15px; color: var(--gris2); }
 
   /* GRID RESULTADOS */
   .resultados-grid {
@@ -282,7 +284,7 @@
     border-radius: 12px;
     padding: 14px;
   }
-  .result-card-label { font-size: 10px; color: var(--gris2); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .result-card-label { font-size: 13px; color: var(--gris2); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
   .result-card-valor { font-size: 18px; font-weight: 700; color: var(--turquesa); }
 
   /* SEMAFORO */
@@ -297,7 +299,7 @@
     margin-bottom: 20px;
   }
   .semaforo-emoji { font-size: 32px; flex-shrink: 0; }
-  .semaforo-texto { font-size: 14px; color: var(--blanco2); line-height: 1.4; }
+  .semaforo-texto { font-size: 16px; color: var(--blanco2); line-height: 1.4; }
   .semaforo-texto strong { color: var(--blanco); }
 
   /* MIC FACES */
@@ -318,7 +320,7 @@
     justify-content: space-between;
     padding: 8px 0;
     border-bottom: 1px solid #2a2a2a;
-    font-size: 14px;
+    font-size: 16px;
   }
   .verif-row:last-child { border-bottom: none; }
   .verif-label { color: var(--gris2); }
@@ -360,15 +362,15 @@
   .footer {
     text-align: center;
     padding: 24px 20px;
-    font-size: 11px;
+    font-size: 13px;
     color: #333;
   }
   .footer span { color: var(--turquesa); font-weight: 700; }
 
   /* HINT */
   .hint {
-    font-size: 12px;
-    color: var(--gris);
+    font-size: 15px;
+    color: var(--gris2);
     text-align: center;
     margin-bottom: 16px;
     font-style: italic;
@@ -637,10 +639,9 @@
       if (numWords[w] !== undefined) {
         const v = numWords[w];
         if (v === 1000000) {
-          miles = (miles + current || 1) * v;
-          total += miles; miles = 0; current = 0;
+          total += ((miles + current) || 1) * v;
+          miles = 0; current = 0;
         } else if (v === 1000) {
-          // "cuatrocientos mil" → current=400, *1000 = 400000
           miles += (current || 1) * 1000;
           current = 0;
         } else if (v >= 100) {
@@ -648,6 +649,9 @@
         } else {
           current += v;
         }
+      } else if (/^\d+$/.test(w)) {
+        // Dígito suelto en medio del texto (ej el celular a veces transcribe "400 mil")
+        current += parseInt(w);
       }
     }
     total += miles + current;
@@ -730,41 +734,42 @@
       const monto = palabrasANumero(texto) || extraerDescYMonto(texto)?.monto;
       if (monto > 0) document.getElementById('gananciaDeseada').value = monto;
     } else if (modo === 'verif') {
-      // El teléfono puede transcribir "600 mil pesos 15 horas" (mix de dígitos y palabras)
-      // Estrategia: normalizar todo a palabras primero, separar precio y horas
-      const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-
-      // Reemplazar dígitos sueltos por su equivalente para que palabrasANumero los procese
-      // Ej: "600 mil" → queremos tratar "600" como seiscientos para multiplicar por mil
-      // Mejor: detectar patrón "NUMERO mil/millones" y convertir
+      // Convierte un fragmento de texto (puede ser dígitos, palabras, o mix) a número
       function textoAValor(str) {
-        // Si es solo dígitos (con puntos/comas), convertir directo
-        const soloNum = str.trim().replace(/\./g,'').replace(',','.');
+        const s = str.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+                     .replace(/pesos?|dolares?|euros?|rs?\$?/g,'').trim();
+        // Solo dígitos puros (con puntos o comas de miles)
+        const soloNum = s.replace(/\./g,'').replace(',','.');
         if (/^\d+(\.\d+)?$/.test(soloNum)) return parseFloat(soloNum);
-        // Si tiene dígitos seguidos de "mil" o "millones", resolver
-        const conMil = str.replace(/(\d[\d.,]*)\s*mil/g, (_, n) => {
-          return String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000);
-        });
-        const conMillon = conMil.replace(/(\d[\d.,]*)\s*mill[oa]n[eoa]*/g, (_, n) => {
-          return String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000000);
-        });
-        // Ahora intentar con palabras
-        const porPalabras = palabrasANumero(conMillon);
-        if (porPalabras > 0) return porPalabras;
-        // Último recurso: primer número del string
-        const m = conMillon.match(/\d+/);
-        return m ? parseFloat(m[0]) : 0;
+        // Dígito + "mil": ej "500 mil" → 500000, "2 mil" → 2000
+        let r = s.replace(/(\d[\d.,]*)\s*mil(?!l)/g, (_, n) =>
+          String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000));
+        // Dígito + "millon(es)": ej "2 millones" → 2000000
+        r = r.replace(/(\d[\d.,]*)\s*mill[oa]n[eo]*/g, (_, n) =>
+          String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000000));
+        // Sumar todos los números que quedaron en el string (ej "2000000 500000")
+        const allNums = r.match(/\d+/g);
+        if (allNums && allNums.length > 0) {
+          // Si hay varios números sueltos, sumarlos (2000000 + 500000 = 2500000)
+          const suma = allNums.reduce((a, n) => a + parseFloat(n), 0);
+          if (suma > 0) return suma;
+        }
+        // Intentar con palabras puras
+        return palabrasANumero(s);
       }
 
-      // Separar precio y horas por la palabra "horas" o "hora"
-      const sepMatch = t.match(/^(.+?)\s+(?:horas?|,)\s*(.+)$/);
-      if (sepMatch) {
-        const precio = textoAValor(sepMatch[1]);
-        const horas = textoAValor(sepMatch[2]);
+      const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+      // Buscar horas al final: "X pesos Y horas" o "X Y horas"
+      // Captura todo antes de "hora/horas" como precio, lo que sigue como horas
+      const horasMatch = t.match(/^(.+?)\s+(\S+)\s+horas?\s*$/);
+      if (horasMatch) {
+        const precio = textoAValor(horasMatch[1]);
+        const horas  = textoAValor(horasMatch[2]);
         if (precio > 0) document.getElementById('precioPresup').value = precio;
-        if (horas > 0) document.getElementById('horasPresup').value = horas;
+        if (horas  > 0) document.getElementById('horasPresup').value  = horas;
       } else {
-        // Sin separador claro: todo es el precio
+        // Sin "horas": todo es el precio
         const precio = textoAValor(t);
         if (precio > 0) document.getElementById('precioPresup').value = precio;
       }
