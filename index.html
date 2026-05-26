@@ -527,6 +527,7 @@
     <input type="number" class="input-field" id="horasPresup" placeholder="12" min="0">
   </div>
 
+  <div id="debugRaw" style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:10px;font-size:13px;color:#888;margin-bottom:12px;display:none;word-break:break-all;"></div>
   <button class="mic-btn" id="micVerif" onclick="toggleMic('verif')">
     <span class="mic-icon">🎙️</span>
     <span id="micVerifText">DICTAR PRECIO Y HORAS</span>
@@ -658,25 +659,44 @@
     return total;
   }
 
+  function resolverMonto(str) {
+    // Convierte cualquier combo de dígitos+palabras a número
+    // Ej: "400 mil" → 400000, "cuatrocientos mil" → 400000, "400000" → 400000
+    let s = str.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+               .replace(/pesos?|dolares?|euros?|mensual/gi,'').trim();
+    // Dígito + "mil" → multiplicar
+    s = s.replace(/(\d[\d.,]*)\s*mil(?!l)/g, (_, n) =>
+      String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000));
+    // Dígito + "millon(es)" → multiplicar
+    s = s.replace(/(\d[\d.,]*)\s*mill[oa]n[eo]*/g, (_, n) =>
+      String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000000));
+    // Si quedan varios números, sumarlos (ej "2000000 500000")
+    const nums = s.match(/\d+/g);
+    if (nums && nums.length > 0) {
+      return nums.reduce((a, n) => a + parseFloat(n), 0);
+    }
+    // Solo palabras
+    return palabrasANumero(str);
+  }
+
   function extraerDescYMonto(texto) {
     const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-    const numRaw = /(\d[\d.,]*)/.exec(t);
-    if (numRaw) {
-      const monto = parseFloat(numRaw[1].replace('.','').replace(',','.'));
-      const desc = t.replace(numRaw[0],'').replace(/pesos?|dolares?|euros?|mensual/gi,'').trim();
-      return { desc: desc || 'Gasto', monto };
-    }
-    const keywords = Object.keys(numWords);
-    let mejorIdx = -1, mejorVal = 0;
     const words = t.split(/\s+/);
+
+    // Buscar dónde empieza el número (dígito O palabra numérica)
+    let numStart = -1;
     for (let i = 0; i < words.length; i++) {
-      if (numWords[words[i]] !== undefined && i > mejorIdx) { mejorIdx = i; }
+      if (/\d/.test(words[i]) || numWords[words[i]] !== undefined) {
+        numStart = i; break;
+      }
     }
-    if (mejorIdx >= 0) {
-      const desc = words.slice(0, mejorIdx).join(' ').replace(/pesos?|dolares?|euros?/gi,'').trim() || 'Gasto';
-      const montoTexto = words.slice(mejorIdx).join(' ');
-      const monto = palabrasANumero(montoTexto);
-      return { desc, monto };
+
+    if (numStart >= 0) {
+      const desc = words.slice(0, numStart).join(' ')
+                        .replace(/pesos?|dolares?|euros?|mensual/gi,'').trim() || 'Gasto';
+      const montoTexto = words.slice(numStart).join(' ');
+      const monto = resolverMonto(montoTexto);
+      return { desc: desc || 'Gasto', monto };
     }
     return null;
   }
@@ -759,6 +779,10 @@
       }
 
       const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+
+      // Debug: mostrar texto crudo recibido
+      const dbg = document.getElementById('debugRaw');
+      if (dbg) { dbg.style.display='block'; dbg.textContent = '🔍 Texto recibido: "' + texto + '" → normalizado: "' + t + '"'; }
 
       // Buscar horas al final: "X pesos Y horas" o "X Y horas"
       // Captura todo antes de "hora/horas" como precio, lo que sigue como horas
