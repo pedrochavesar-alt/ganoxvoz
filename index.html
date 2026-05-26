@@ -632,17 +632,25 @@
     const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
       .replace(/\by\b/g,'').replace(/\bde\b/g,'').trim();
     const words = t.split(/\s+/);
-    let total = 0, current = 0;
+    let total = 0, current = 0, miles = 0;
     for (let w of words) {
       if (numWords[w] !== undefined) {
         const v = numWords[w];
-        if (v === 1000000) { current = (current||1)*v; total += current; current = 0; }
-        else if (v === 1000) { current = (current||1)*v; }
-        else if (v >= 100) { current = (current||1)*v; }
-        else { current += v; }
+        if (v === 1000000) {
+          miles = (miles + current || 1) * v;
+          total += miles; miles = 0; current = 0;
+        } else if (v === 1000) {
+          // "cuatrocientos mil" → current=400, *1000 = 400000
+          miles += (current || 1) * 1000;
+          current = 0;
+        } else if (v >= 100) {
+          current += v;
+        } else {
+          current += v;
+        }
       }
     }
-    total += current;
+    total += miles + current;
     return total;
   }
 
