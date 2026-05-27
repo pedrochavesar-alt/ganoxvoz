@@ -652,18 +652,34 @@
         }
       } else if (/^[\d.,]+$/.test(w)) {
         // Dígito suelto con posibles puntos/comas de miles: "60.000", "400,000", "400000"
-        const limpio = parseFloat(w.replace(/\./g,'').replace(',','.'));
-        if (!isNaN(limpio)) current += limpio;
+        current += normNum(w) || 0;
       }
     }
     total += miles + current;
     return total;
   }
 
+  // Convierte string de dígitos a número, manejando puntos Y comas como separador de miles
+  // "100,000" → 100000 | "60.000" → 60000 | "400000" → 400000 | "1,5" → 1.5
+  function normNum(n) {
+    n = n.trim();
+    // Si tiene coma y no tiene punto: puede ser "100,000" (miles) o "1,5" (decimal)
+    // Si la parte después de la coma tiene 3 dígitos → miles separator
+    if (/,/.test(n) && !/\./.test(n)) {
+      if (/,\d{3}$/.test(n)) return parseFloat(n.replace(/,/g,''));  // 100,000 → 100000
+      return parseFloat(n.replace(',','.'));  // 1,5 → 1.5
+    }
+    // Si tiene punto: puede ser "60.000" (miles) o "1.5" (decimal)
+    if (/\./.test(n)) {
+      if (/\.\d{3}$/.test(n)) return parseFloat(n.replace(/\./g,''));  // 60.000 → 60000
+      return parseFloat(n.replace(/\./g,''));  // quitar todos los puntos
+    }
+    return parseFloat(n);
+  }
+
   function resolverMonto(str) {
     // Convierte cualquier combo de dígitos+palabras a número
-    // Ej: "400 mil" → 400000, "cuatrocientos mil" → 400000, "400000" → 400000
-    const original = str;
+    // Ej: "400 mil" → 400000, "cuatrocientos mil" → 400000, "100,000" → 100000
     let s = str.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
                .replace(/pesos?|dolares?|euros?|mensual/gi,'').trim();
     // Primero intentar con palabras puras (cubre "cuatrocientos mil", "ochenta mil", etc.)
@@ -671,18 +687,14 @@
     if (porPalabras > 0) return porPalabras;
     // Dígito + "mil" → multiplicar (cubre "400 mil", "2 mil")
     s = s.replace(/(\d[\d.,]*)\s*mil(?!l)/g, (_, n) =>
-      String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000));
+      String(normNum(n) * 1000));
     // Dígito + "millon(es)" → multiplicar
     s = s.replace(/(\d[\d.,]*)\s*mill[oa]n[eo]*/g, (_, n) =>
-      String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000000));
+      String(normNum(n) * 1000000));
     // Sumar todos los números que quedaron
-    // IMPORTANTE: quitar puntos de miles antes de parsear (ej "60.000" → 60000)
     const nums = s.match(/[\d.,]+/g);
     if (nums && nums.length > 0) {
-      return nums.reduce((a, n) => {
-        const limpio = n.replace(/\./g,'').replace(',','.');
-        return a + (parseFloat(limpio) || 0);
-      }, 0);
+      return nums.reduce((a, n) => a + (normNum(n) || 0), 0);
     }
     return 0;
   }
