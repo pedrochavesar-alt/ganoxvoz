@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#00d4c8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gano x Voz">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIkdhbm8geCBWb3oiLCAic2hvcnRfbmFtZSI6ICJHYW5vIHggVm96IiwgInN0YXJ0X3VybCI6ICIuIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMDAwMDAiLCAidGhlbWVfY29sb3IiOiAiIzAwZDRjOCIsICJpY29ucyI6IFt7InNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSFpwWlhkQ2IzZzlJakFnTUNBMU1USWdOVEV5SWo0S0lDQThJUzB0SUVadmJtUnZJRzVsWjNKdklDMHRQZ29nSUR4eVpXTjBJSGRwWkhSb1BTSTFNVElpSUdobGFXZG9kRDBpTlRFeUlpQm1hV3hzUFNJak1EQXdNREF3SWk4K0NpQWdDaUFnUENFdExTQlBibVJoY3lCcGVuRjFhV1Z5WkdFZ0xTMCtDaUFnUEhCaGRHZ2daRDBpVFRFME1DQXhPREFnVVRFeE1DQXlNekFnTVRRd0lESTRNQ0lnYzNSeWIydGxQU0lqTURCa05HTTRJaUJ6ZEhKdmEyVXRkMmxrZEdnOUlqRTBJaUJtYVd4c1BTSnViMjVsSWlCemRISnZhMlV0YkdsdVpXTmhjRDBpY205MWJtUWlMejRLSUNBOGNHRjBhQ0JrUFNKTk1URXdJREUxTlNCUk5qVWdNak13SURFeE1DQXpNRFVpSUhOMGNtOXJaVDBpSXpBd1pEUmpPQ0lnYzNSeWIydGxMWGRwWkhSb1BTSXhOQ0lnWm1sc2JEMGlibTl1WlNJZ2MzUnliMnRsTFd4cGJtVmpZWEE5SW5KdmRXNWtJaTgrQ2lBZ0NpQWdQQ0V0TFNCUGJtUmhjeUJrWlhKbFkyaGhJQzB0UGdvZ0lEeHdZWFJvSUdROUlrMHpOeklnTVRnd0lGRTBNRElnTWpNd0lETTNNaUF5T0RBaUlITjBjbTlyWlQwaUl6QXdaRFJqT0NJZ2MzUnliMnRsTFhkcFpIUm9QU0l4TkNJZ1ptbHNiRDBpYm05dVpTSWdjM1J5YjJ0bExXeHBibVZqWVhBOUluSnZkVzVrSWk4K0NpQWdQSEJoZEdnZ1pEMGlUVFF3TWlBeE5UVWdVVFEwTnlBeU16QWdOREF5SURNd05TSWdjM1J5YjJ0bFBTSWpNREJrTkdNNElpQnpkSEp2YTJVdGQybGtkR2c5SWpFMElpQm1hV3hzUFNKdWIyNWxJaUJ6ZEhKdmEyVXRiR2x1WldOaGNEMGljbTkxYm1RaUx6NEtJQ0FLSUNBOElTMHRJRU4xWlhKd2J5QmtaV3dnYldsamNzT3pabTl1YnlBdExUNEtJQ0E4Y21WamRDQjRQU0l4T1RZaUlIazlJamd3SWlCM2FXUjBhRDBpTVRJd0lpQm9aV2xuYUhROUlqRTNNQ0lnY25nOUlqWXdJaUJtYVd4c1BTSWpNREJrTkdNNElpOCtDaUFnQ2lBZ1BDRXRMU0JNdzYxdVpXRnpJR1JsYkNCdGFXTWdMUzArQ2lBZ1BHeHBibVVnZURFOUlqSXlNaUlnZVRFOUlqRXpOU0lnZURJOUlqSTVNQ0lnZVRJOUlqRXpOU0lnYzNSeWIydGxQU0lqTURBd0lpQnpkSEp2YTJVdGQybGtkR2c5SWpFd0lpQnpkSEp2YTJVdGJHbHVaV05oY0QwaWNtOTFibVFpTHo0S0lDQThiR2x1WlNCNE1UMGlNakU0SWlCNU1UMGlNVFl3SWlCNE1qMGlNamswSWlCNU1qMGlNVFl3SWlCemRISnZhMlU5SWlNd01EQWlJSE4wY205clpTMTNhV1IwYUQwaU1UQWlJSE4wY205clpTMXNhVzVsWTJGd1BTSnliM1Z1WkNJdlBnb2dJRHhzYVc1bElIZ3hQU0l5TWpJaUlIa3hQU0l4T0RVaUlIZ3lQU0l5T1RBaUlIa3lQU0l4T0RVaUlITjBjbTlyWlQwaUl6QXdNQ0lnYzNSeWIydGxMWGRwWkhSb1BTSXhNQ0lnYzNSeWIydGxMV3hwYm1WallYQTlJbkp2ZFc1a0lpOCtDaUFnUEd4cGJtVWdlREU5SWpJek1DSWdlVEU5SWpJeE1DSWdlREk5SWpJNE1pSWdlVEk5SWpJeE1DSWdjM1J5YjJ0bFBTSWpNREF3SWlCemRISnZhMlV0ZDJsa2RHZzlJakV3SWlCemRISnZhMlV0YkdsdVpXTmhjRDBpY205MWJtUWlMejRLSUNBS0lDQThJUzB0SUVGeVkyOGdZbUZ6WlNBdExUNEtJQ0E4Y0dGMGFDQmtQU0pOTVRZd0lESTFOU0JSTVRZd0lETXpNQ0F5TlRZZ016TXdJRkV6TlRJZ016TXdJRE0xTWlBeU5UVWlJSE4wY205clpUMGlJekF3WkRSak9DSWdjM1J5YjJ0bExYZHBaSFJvUFNJeE5DSWdabWxzYkQwaWJtOXVaU0lnYzNSeWIydGxMV3hwYm1WallYQTlJbkp2ZFc1a0lpOCtDaUFnQ2lBZ1BDRXRMU0JRWVd4dklIa2dZbUZ6WlNBdExUNEtJQ0E4YkdsdVpTQjRNVDBpTWpVMklpQjVNVDBpTXpNd0lpQjRNajBpTWpVMklpQjVNajBpTXpjd0lpQnpkSEp2YTJVOUlpTXdNR1EwWXpnaUlITjBjbTlyWlMxM2FXUjBhRDBpTVRRaUlITjBjbTlyWlMxc2FXNWxZMkZ3UFNKeWIzVnVaQ0l2UGdvZ0lEeHNhVzVsSUhneFBTSXlNRFlpSUhreFBTSXpOekFpSUhneVBTSXpNRFlpSUhreVBTSXpOekFpSUhOMGNtOXJaVDBpSXpBd1pEUmpPQ0lnYzNSeWIydGxMWGRwWkhSb1BTSXhPQ0lnYzNSeWIydGxMV3hwYm1WallYQTlJbkp2ZFc1a0lpOCtDaUFnQ2lBZ1BDRXRMU0JIUVU1UElDMHRQZ29nSUR4MFpYaDBJSGc5SWpJMU5pSWdlVDBpTkRRNElpQm1iMjUwTFdaaGJXbHNlVDBpUVhKcFlXd2dRbXhoWTJzc0lITmhibk10YzJWeWFXWWlJR1p2Ym5RdGMybDZaVDBpTnpJaUlHWnZiblF0ZDJWcFoyaDBQU0k1TURBaUlHWnBiR3c5SWlObVptWm1abVlpSUhSbGVIUXRZVzVqYUc5eVBTSnRhV1JrYkdVaUlHeGxkSFJsY2kxemNHRmphVzVuUFNJMElqNUhRVTVQUEM5MFpYaDBQZ29nSUFvZ0lEd2hMUzBnV0NCV1Qxb2dMUzArQ2lBZ1BIUmxlSFFnZUQwaU1qVTJJaUI1UFNJMU1EWWlJR1p2Ym5RdFptRnRhV3g1UFNKQmNtbGhiQ0JDYkdGamF5d2djMkZ1Y3kxelpYSnBaaUlnWm05dWRDMXphWHBsUFNJek9DSWdabTl1ZEMxM1pXbG5hSFE5SWpjd01DSWdabWxzYkQwaUl6QXdaRFJqT0NJZ2RHVjRkQzFoYm1Ob2IzSTlJbTFwWkdSc1pTSWdiR1YwZEdWeUxYTndZV05wYm1jOUlqWWlQbGdnVms5YVBDOTBaWGgwUGdvOEwzTjJaejQ9IiwgInNpemVzIjogIjUxMng1MTIiLCAidHlwZSI6ICJpbWFnZS9zdmcreG1sIn1dfQ==">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8IS0tIEZvbmRvIG5lZ3JvIC0tPgogIDxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiBmaWxsPSIjMDAwMDAwIi8+CiAgCiAgPCEtLSBPbmRhcyBpenF1aWVyZGEgLS0+CiAgPHBhdGggZD0iTTE0MCAxODAgUTExMCAyMzAgMTQwIDI4MCIgc3Ryb2tlPSIjMDBkNGM4IiBzdHJva2Utd2lkdGg9IjE0IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8cGF0aCBkPSJNMTEwIDE1NSBRNjUgMjMwIDExMCAzMDUiIHN0cm9rZT0iIzAwZDRjOCIgc3Ryb2tlLXdpZHRoPSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgCiAgPCEtLSBPbmRhcyBkZXJlY2hhIC0tPgogIDxwYXRoIGQ9Ik0zNzIgMTgwIFE0MDIgMjMwIDM3MiAyODAiIHN0cm9rZT0iIzAwZDRjOCIgc3Ryb2tlLXdpZHRoPSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTQwMiAxNTUgUTQ0NyAyMzAgNDAyIDMwNSIgc3Ryb2tlPSIjMDBkNGM4IiBzdHJva2Utd2lkdGg9IjE0IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICAKICA8IS0tIEN1ZXJwbyBkZWwgbWljcsOzZm9ubyAtLT4KICA8cmVjdCB4PSIxOTYiIHk9IjgwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjE3MCIgcng9IjYwIiBmaWxsPSIjMDBkNGM4Ii8+CiAgCiAgPCEtLSBMw61uZWFzIGRlbCBtaWMgLS0+CiAgPGxpbmUgeDE9IjIyMiIgeTE9IjEzNSIgeDI9IjI5MCIgeTI9IjEzNSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8bGluZSB4MT0iMjE4IiB5MT0iMTYwIiB4Mj0iMjk0IiB5Mj0iMTYwIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxsaW5lIHgxPSIyMjIiIHkxPSIxODUiIHgyPSIyOTAiIHkyPSIxODUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPGxpbmUgeDE9IjIzMCIgeTE9IjIxMCIgeDI9IjI4MiIgeTI9IjIxMCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICAKICA8IS0tIEFyY28gYmFzZSAtLT4KICA8cGF0aCBkPSJNMTYwIDI1NSBRMTYwIDMzMCAyNTYgMzMwIFEzNTIgMzMwIDM1MiAyNTUiIHN0cm9rZT0iIzAwZDRjOCIgc3Ryb2tlLXdpZHRoPSIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgCiAgPCEtLSBQYWxvIHkgYmFzZSAtLT4KICA8bGluZSB4MT0iMjU2IiB5MT0iMzMwIiB4Mj0iMjU2IiB5Mj0iMzcwIiBzdHJva2U9IiMwMGQ0YzgiIHN0cm9rZS13aWR0aD0iMTQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxsaW5lIHgxPSIyMDYiIHkxPSIzNzAiIHgyPSIzMDYiIHkyPSIzNzAiIHN0cm9rZT0iIzAwZDRjOCIgc3Ryb2tlLXdpZHRoPSIxOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgCiAgPCEtLSBHQU5PIC0tPgogIDx0ZXh0IHg9IjI1NiIgeT0iNDQ4IiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2ssIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNzIiIGZvbnQtd2VpZ2h0PSI5MDAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSI0Ij5HQU5PPC90ZXh0PgogIAogIDwhLS0gWCBWT1ogLS0+CiAgPHRleHQgeD0iMjU2IiB5PSI1MDYiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjaywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIzOCIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzAwZDRjOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjYiPlggVk9aPC90ZXh0Pgo8L3N2Zz4=">
 <title>Gano x Voz</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap');
@@ -34,7 +41,7 @@
     min-height: 100vh;
     overflow-x: hidden;
     overflow-y: auto;
-    font-size: 16px;
+    font-size: 17px;
   }
 
   /* HEADER */
@@ -47,17 +54,18 @@
   }
   .logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 2px;
+    font-size: 56px;
+    letter-spacing: 3px;
     color: var(--turquesa);
+    line-height: 1;
   }
-  .logo span { color: var(--blanco2); }
+  .logo span { color: var(--blanco); font-size: 40px; text-transform: lowercase; }
   .tagline {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--gris2);
     letter-spacing: 1px;
     text-transform: uppercase;
-    margin-top: 2px;
+    margin-top: 4px;
   }
 
   /* MONEDA SELECTOR */
@@ -303,7 +311,7 @@
   .semaforo-texto strong { color: var(--blanco); }
 
   /* MIC FACES */
-  .mic-face { width: 56px; height: 56px; flex-shrink: 0; }
+  .mic-face { width: 112px; height: 112px; flex-shrink: 0; }
   .mic-face svg { width: 100%; height: 100%; }
 
   /* VERIFICADOR */
@@ -960,12 +968,12 @@
       vGan.textContent = '+ ' + fmt(gananciaTotal);
       vGan.className = 'verif-valor ok';
       vBan.className = 'verif-banner ok';
-      vBan.innerHTML = '<span style="display:inline-flex;align-items:center;gap:10px;justify-content:center"><span style="width:36px;height:36px;display:inline-block">' + micFeliz() + '</span> ¡Este trabajo te conviene!</span>';
+      vBan.innerHTML = '<span style="display:inline-flex;align-items:center;gap:10px;justify-content:center"><span style="width:72px;height:72px;display:inline-block">' + micFeliz() + '</span> ¡Este trabajo te conviene!</span>';
     } else {
       vGan.textContent = '- ' + fmt(Math.abs(gananciaTotal));
       vGan.className = 'verif-valor mal';
       vBan.className = 'verif-banner mal';
-      vBan.innerHTML = '<span style="display:inline-flex;align-items:center;gap:10px;justify-content:center"><span style="width:36px;height:36px;display:inline-block">' + micTriste() + '</span> Estás cobrando por debajo de tu tarifa mínima</span>';
+      vBan.innerHTML = '<span style="display:inline-flex;align-items:center;gap:10px;justify-content:center"><span style="width:72px;height:72px;display:inline-block">' + micTriste() + '</span> Estás cobrando por debajo de tu tarifa mínima</span>';
     }
 
     document.getElementById('verifResult').classList.add('visible');
