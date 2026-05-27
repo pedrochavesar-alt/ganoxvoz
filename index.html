@@ -776,26 +776,8 @@
     } else if (modo === 'verif') {
       // Convierte un fragmento de texto (puede ser dígitos, palabras, o mix) a número
       function textoAValor(str) {
-        const s = str.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-                     .replace(/pesos?|dolares?|euros?|rs?\$?/g,'').trim();
-        // Solo dígitos puros (con puntos o comas de miles)
-        const soloNum = s.replace(/\./g,'').replace(',','.');
-        if (/^\d+(\.\d+)?$/.test(soloNum)) return parseFloat(soloNum);
-        // Dígito + "mil": ej "500 mil" → 500000, "2 mil" → 2000
-        let r = s.replace(/(\d[\d.,]*)\s*mil(?!l)/g, (_, n) =>
-          String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000));
-        // Dígito + "millon(es)": ej "2 millones" → 2000000
-        r = r.replace(/(\d[\d.,]*)\s*mill[oa]n[eo]*/g, (_, n) =>
-          String(parseFloat(n.replace(/\./g,'').replace(',','.')) * 1000000));
-        // Sumar todos los números que quedaron en el string (ej "2000000 500000")
-        const allNums = r.match(/\d+/g);
-        if (allNums && allNums.length > 0) {
-          // Si hay varios números sueltos, sumarlos (2000000 + 500000 = 2500000)
-          const suma = allNums.reduce((a, n) => a + parseFloat(n), 0);
-          if (suma > 0) return suma;
-        }
-        // Intentar con palabras puras
-        return palabrasANumero(s);
+        // Reutilizar resolverMonto que ya maneja todos los formatos correctamente
+        return resolverMonto(str);
       }
 
       const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
